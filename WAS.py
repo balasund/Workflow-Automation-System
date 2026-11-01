@@ -2007,41 +2007,37 @@ def DeadlineMonitoring():
     # ---------------------------------------------------------
     col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
-        if st.button(
-            f"🟢 Normal\n**{normal_count}**",
-            key="deadline_normal",
-            type="primary",
-            use_container_width=True
-        ):
-            st.session_state.deadline_category = "Normal"
+with col1:
+    if st.button(
+        f"🟢 Normal\n\n**{normal_count}**",
+        key="deadline_normal",
+        use_container_width=True
+    ):
+        st.session_state["selected_deadline_category"] = "Normal"
 
-    with col2:
-        if st.button(
-            f"🟡 Due Soon\n**{due_soon_count}**",
-            key="deadline_due_soon",
-            type="primary",
-            use_container_width=True
-        ):
-            st.session_state.deadline_category = "Due Soon"
+with col2:
+    if st.button(
+        f"🟡 Due Soon\n\n**{due_soon_count}**",
+        key="deadline_due_soon",
+        use_container_width=True
+    ):
+        st.session_state["selected_deadline_category"] = "Due Soon"
 
-    with col3:
-        if st.button(
-            f"🟠 Critical\n**{critical_count}**",
-            key="deadline_critical",
-            type="primary",
-            use_container_width=True
-        ):
-            st.session_state.deadline_category = "Critical"
+with col3:
+    if st.button(
+        f"🟠 Critical\n\n**{critical_count}**",
+        key="deadline_critical",
+        use_container_width=True
+    ):
+        st.session_state["selected_deadline_category"] = "Critical"
 
-    with col4:
-        if st.button(
-            f"🚨 Overdue\n**{overdue_count}**",
-            key="deadline_overdue",
-            type="primary",
-            use_container_width=True
-        ):
-            st.session_state.deadline_category = "Overdue"
+with col4:
+    if st.button(
+        f"🚨 Overdue\n\n**{overdue_count}**",
+        key="deadline_overdue",
+        use_container_width=True
+    ):
+        st.session_state["selected_deadline_category"] = "Overdue"
 
     # ---------------------------------------------------------
     # Show selected category
@@ -4378,6 +4374,40 @@ def _render_notification_center():
     # rules cannot make the label faint or leave a red underline/border.
     st.markdown("""
     <style>
+    /* Stack deadline labels and numbers vertically */
+    .st-key-deadline_normal button,
+    .st-key-deadline_due_soon button,
+    .st-key-deadline_critical button,
+    .st-key-deadline_overdue button {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 6px !important;
+    }
+    
+    /* Remove paragraph spacing */
+    .st-key-deadline_normal button p,
+    .st-key-deadline_due_soon button p,
+    .st-key-deadline_critical button p,
+    .st-key-deadline_overdue button p {
+        margin: 0 !important;
+        text-align: center !important;
+    }
+
+    /* Make the numbers larger */
+    .st-key-deadline_normal button p strong,
+    .st-key-deadline_due_soon button p strong,
+    .st-key-deadline_critical button p strong,
+    .st-key-deadline_overdue button p strong {
+        display: block !important;
+        font-size: 2.35rem !important;
+        font-weight: 780 !important;
+        line-height: 1.1 !important;
+    }
+
+    
     .st-key-job_notification_button button {
         background: #FFFFFF !important;
         color: #253047 !important;
