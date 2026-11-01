@@ -2007,37 +2007,37 @@ def DeadlineMonitoring():
     # ---------------------------------------------------------
     col1, col2, col3, col4 = st.columns(4)
 
-with col1:
-    if st.button(
-        f"🟢 Normal\n\n**{normal_count}**",
-        key="deadline_normal",
-        use_container_width=True
-    ):
-        st.session_state["selected_deadline_category"] = "Normal"
+    with col1:
+        if st.button(
+            f"🟢 Normal\n\n**{normal_count}**",
+            key="deadline_normal",
+            use_container_width=True
+        ):
+            st.session_state["selected_deadline_category"] = "Normal"
 
-with col2:
-    if st.button(
-        f"🟡 Due Soon\n\n**{due_soon_count}**",
-        key="deadline_due_soon",
-        use_container_width=True
-    ):
-        st.session_state["selected_deadline_category"] = "Due Soon"
+    with col2:
+        if st.button(
+            f"🟡 Due Soon\n\n**{due_soon_count}**",
+            key="deadline_due_soon",
+            use_container_width=True
+        ):
+            st.session_state["selected_deadline_category"] = "Due Soon"
 
-with col3:
-    if st.button(
-        f"🟠 Critical\n\n**{critical_count}**",
-        key="deadline_critical",
-        use_container_width=True
-    ):
-        st.session_state["selected_deadline_category"] = "Critical"
+    with col3:
+        if st.button(
+            f"🟠 Critical\n\n**{critical_count}**",
+            key="deadline_critical",
+            use_container_width=True
+        ):
+            st.session_state["selected_deadline_category"] = "Critical"
 
-with col4:
-    if st.button(
-        f"🚨 Overdue\n\n**{overdue_count}**",
-        key="deadline_overdue",
-        use_container_width=True
-    ):
-        st.session_state["selected_deadline_category"] = "Overdue"
+    with col4:
+        if st.button(
+            f"🚨 Overdue\n\n**{overdue_count}**",
+            key="deadline_overdue",
+            use_container_width=True
+        ):
+            st.session_state["selected_deadline_category"] = "Overdue"
 
     # ---------------------------------------------------------
     # Show selected category
