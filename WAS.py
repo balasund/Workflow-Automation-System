@@ -14,7 +14,7 @@ import base64
 import json
 from langchain_openai import ChatOpenAI
 from gmail_automation import (
-    process_new_emails, start_background_poller, gmail_setup_status, github_sync_configured,
+    process_new_emails, start_background_poller, gmail_setup_status,
     get_pending_job_notifications,
 )
 
@@ -1932,6 +1932,23 @@ def DeadlineMonitoring():
         transition: all 0.18s ease-in-out !important;
     }
 
+    /* Stack the category label above its count */
+    .st-key-deadline_normal button div[data-testid="stMarkdownContainer"],
+    .st-key-deadline_due_soon button div[data-testid="stMarkdownContainer"],
+    .st-key-deadline_critical button div[data-testid="stMarkdownContainer"],
+    .st-key-deadline_overdue button div[data-testid="stMarkdownContainer"] {
+        width: 100% !important;
+        text-align: center !important;
+    }
+
+    /* Keep the label and number on separate centered lines */
+    .st-key-deadline_normal button p,
+    .st-key-deadline_due_soon button p,
+    .st-key-deadline_critical button p,
+    .st-key-deadline_overdue button p {
+        text-align: center !important;
+    }
+
     /* Explicit label typography */
     .st-key-deadline_normal button div[data-testid="stMarkdownContainer"],
     .st-key-deadline_due_soon button div[data-testid="stMarkdownContainer"],
@@ -2009,7 +2026,7 @@ def DeadlineMonitoring():
 
     with col1:
         if st.button(
-            f"🟢 Normal\n**{normal_count}**",
+            f"🟢 Normal\n\n**{normal_count}**",
             key="deadline_normal",
             type="primary",
             use_container_width=True
@@ -2018,7 +2035,7 @@ def DeadlineMonitoring():
 
     with col2:
         if st.button(
-            f"🟡 Due Soon\n**{due_soon_count}**",
+            f"🟡 Due Soon\n\n**{due_soon_count}**",
             key="deadline_due_soon",
             type="primary",
             use_container_width=True
@@ -2027,7 +2044,7 @@ def DeadlineMonitoring():
 
     with col3:
         if st.button(
-            f"🟠 Critical\n**{critical_count}**",
+            f"🟠 Critical\n\n**{critical_count}**",
             key="deadline_critical",
             type="primary",
             use_container_width=True
@@ -2036,7 +2053,7 @@ def DeadlineMonitoring():
 
     with col4:
         if st.button(
-            f"🚨 Overdue\n**{overdue_count}**",
+            f"🚨 Overdue\n\n**{overdue_count}**",
             key="deadline_overdue",
             type="primary",
             use_container_width=True
@@ -4452,15 +4469,10 @@ def EmailAutomation():
     st.write("Read incoming Gmail messages and add new jobs to the existing `Inprogress` sheet. Only the Job Name is required in the email.")
     status = gmail_setup_status()
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Gmail OAuth credentials", "Found" if status["credentials_file"] else "Not in cloud")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Gmail OAuth credentials", "Found" if status["credentials_file"] else "Missing")
     c2.metric("Gmail authorization", "Connected" if status["token_file"] else "Not connected")
     c3.metric("Excel workbook", "Found" if status["workbook_file"] else "Missing")
-    c4.metric("GitHub workbook sync", "Enabled" if status.get("github_sync_configured") else "Not configured")
-    if status.get("github_sync_configured"):
-        st.success("GitHub sync is configured. Gmail job imports will fetch the latest workbook and commit the updated workflow.xlsx to GitHub.")
-    else:
-        st.warning("GitHub sync is not configured. Add the [github] settings shown below to Streamlit Cloud → App settings → Secrets.")
 
     with st.expander("Setup and monitoring settings", expanded=not status["token_file"]):
         st.write(f"**Polling interval:** every {status['poll_seconds']} seconds")
@@ -4477,19 +4489,7 @@ def EmailAutomation():
         **Streamlit Community Cloud**
         1. Run the authorization script locally to generate a valid `token.json`.
         2. Open App **Settings → Secrets** and add the complete JSON contents of that token as `token_json` under `[gmail]` (see `README_GMAIL_CLOUD_SETUP.md`).
-        3. Add the GitHub settings below to the same Secrets page. Keep your existing `AICREDITS_API_KEY` and `[gmail]` section unchanged.
-        4. Do not upload `token.json`, `credentials.json`, or your GitHub token to GitHub.
-
-        **GitHub workbook sync (add this section; do not replace existing secrets):**
-        ```toml
-        [github]
-        token = "YOUR_FINE_GRAINED_GITHUB_TOKEN"
-        owner = "balasund"
-        repo = "Workflow-Automation-System"
-        branch = "main"
-        path = "workflow.xlsx"
-        ```
-        The GitHub token needs **Contents: Read and write** access to this repository.
+        3. Do not upload `token.json` or `credentials.json` to GitHub.
         """)
         st.caption("Do not share credentials.json or token.json. They can grant access to your mailbox.")
 
